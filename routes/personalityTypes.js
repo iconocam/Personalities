@@ -1,4 +1,5 @@
 const express = require ('express');
+const { ObjectId } = require('mongodb');
 const axios = require ('axios');
 // trying to connect to mongo database
 const { connectToDatabase } = require('./conn');
@@ -78,7 +79,7 @@ router.get('/all', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
+// analyst file
 router.get('/analysts', (req, res) => {
     console.log('Accessed /analysts route');
     try {
@@ -90,7 +91,7 @@ router.get('/analysts', (req, res) => {
 });
 
 
-
+// Send schema collection as json
 router.get('/schema/all', async (req, res) => {
     try {
         const schemaData = await getAllSchemaData();
@@ -100,7 +101,7 @@ router.get('/schema/all', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
+// Schema collection fn
 async function getAllSchemaData() {
     try {
         const client = await connectToDatabase();
@@ -123,7 +124,7 @@ router.get('/users/all', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
+// Return all users fn
 async function getAllUsers() {
     try {
         const client = await connectToDatabase();
@@ -135,7 +136,9 @@ async function getAllUsers() {
         throw error;
     }
 }
-
+// Route for user to insert data
+// {"name": "Topao",
+// "person": "Monk"}   This won't work when posting data, you need name and species.
 router.post('/users', async (req, res) => {
     try {
         const { name, species } = req.body;  
@@ -148,7 +151,7 @@ router.post('/users', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
+// Create User
 async function createUser(user) {
     try {
         const client = await connectToDatabase();
@@ -172,16 +175,50 @@ router.delete('/users/:userId', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
+// Delete user
 async function deleteUser(userId) {
     try {
         const client = await connectToDatabase();
         const collection = client.db('personalityTypes').collection('users');
-        const result = await collection.deleteOne({ _id: ObjectId(userId) });
+        const result = await collection.deleteOne({ _id: new ObjectId(userId) });
         return result;
     } catch (error) {
         console.error('Error deleting user in MongoDB:', error);
         throw error;
     }
 }
+// Update a user by its ID
+// http://localhost:8000/personalities/users/65b4cb9ca80f1266256f3964  Can use this in postman to test patch , Modifies user 'Ornn' :)
+router.patch('/users/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const updatedUserData = req.body;
+
+        const result = await updateUser(userId, updatedUserData);
+        res.json(result);
+    } catch (error) {
+        console.error('Error in /users/:userId route:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+async function updateUser(userId, updatedUserData) {
+    try {
+        const client = await connectToDatabase();
+        const collection = client.db('personalityTypes').collection('users');
+        
+        const objectId = new ObjectId(userId); // Convert userId to ObjectId
+
+        const result = await collection.updateOne(
+            { _id: objectId },
+            { $set: updatedUserData }
+        );
+
+        return result;
+    } catch (error) {
+        console.error('Error updating user in MongoDB:', error);
+        throw error;
+    }
+}
+
 module.exports = router;

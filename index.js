@@ -44,11 +44,13 @@ app.use(logger);
 
 
 // Routes 
-// // http://localhost:8000/personalities
-// http://localhost:8000/personalities/all
-// http://localhost:8000/analysts
-// http://localhost:8000/personalities/schema/all
-// http://localhost:8000/personalities/users/all
+// // http://localhost:8000/personalities this just says Personalities :P
+// http://localhost:8000/personalities/all  Reveals collection data for three types within it
+// http://localhost:8000/analysts  to get all analyst types
+// http://localhost:8000/personalities/schema/all to see the types schemas of mind
+// http://localhost:8000/personalities/users/all use this URL for accessing user data
+// http://localhost:8000/personalities/users use this URL for POST requests
+// http://localhost:8000/personalities/users/65b4d59d8b15106264eb8ad2 use this URL for deleting a user (change the example numbers to user ID)
 
 app.use('/personalities', personalityRoutes);
 
