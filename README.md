@@ -11,5 +11,5 @@
 #### "species": "Monk"}
 ###  http://localhost:8000/personalities/users/65b4d59d8b15106264eb8ad2 URL for DELETING a user (change the example numbers to user ID)
 ###  http://localhost:8000/personalities/users/65b4cb9ca80f1266256f3964  URL for PATCH, update a user by Id, current Id example is linked to name 'Ornn' in database
-### For index, in our  performDatabaseOperations(), you can modify the name to a users actual name in the database. 
+### The index lies within in our  performDatabaseOperations(), and you can modify the name to a users actual name in the database which is fun; 
 #### i.e., const result = await db.collection('users').find({ name: 'LingeringWisdom' }).toArray(); , modify the name to either of ('IE3000', 'Poelin', 'LingeringWisdom', 'Ornn', Topao, Heale) 
