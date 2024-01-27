@@ -89,4 +89,99 @@ router.get('/analysts', (req, res) => {
     }
 });
 
+
+
+router.get('/schema/all', async (req, res) => {
+    try {
+        const schemaData = await getAllSchemaData();
+        res.json(schemaData);
+    } catch (error) {
+        console.error('Error in /schema/all route:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+async function getAllSchemaData() {
+    try {
+        const client = await connectToDatabase();
+        const collection = client.db('personalityTypes').collection('schema');
+        const allSchemaData = await collection.find().toArray();
+        return allSchemaData;
+    } catch (error) {
+        console.error('Error fetching data from MongoDB:', error);
+        throw error;
+    }
+}
+
+
+router.get('/users/all', async (req, res) => {
+    try {
+        const userData = await getAllUsers();
+        res.json(userData);
+    } catch (error) {
+        console.error('Error in /users/all route:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+async function getAllUsers() {
+    try {
+        const client = await connectToDatabase();
+        const collection = client.db('personalityTypes').collection('users');
+        const allUsers = await collection.find().toArray();
+        return allUsers;
+    } catch (error) {
+        console.error('Error fetching data from MongoDB:', error);
+        throw error;
+    }
+}
+
+router.post('/users', async (req, res) => {
+    try {
+        const { name, species } = req.body;  
+        console.log('Received user data:', { name, species });
+        const result = await createUser({ name, species });
+        console.log('Result of MongoDB post:', result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error in /users route:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+async function createUser(user) {
+    try {
+        const client = await connectToDatabase();
+        const collection = client.db('personalityTypes').collection('users');
+        const result = await collection.insertOne(user);
+        return result;
+    } catch (error) {
+        console.error('Error creating user in MongoDB:', error);
+        throw error;
+    }
+}
+
+// userId allows specifying of which user to delete 
+router.delete('/users/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const result = await deleteUser(userId);
+        res.json(result);
+    } catch (error) {
+        console.error('Error in /users/:userId route:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+async function deleteUser(userId) {
+    try {
+        const client = await connectToDatabase();
+        const collection = client.db('personalityTypes').collection('users');
+        const result = await collection.deleteOne({ _id: ObjectId(userId) });
+        return result;
+    } catch (error) {
+        console.error('Error deleting user in MongoDB:', error);
+        throw error;
+    }
+}
 module.exports = router;

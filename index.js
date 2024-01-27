@@ -47,6 +47,8 @@ app.use(logger);
 // // http://localhost:8000/personalities
 // http://localhost:8000/personalities/all
 // http://localhost:8000/analysts
+// http://localhost:8000/personalities/schema/all
+// http://localhost:8000/personalities/users/all
 
 app.use('/personalities', personalityRoutes);
 
