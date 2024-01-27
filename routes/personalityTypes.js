@@ -31,7 +31,7 @@ router.get('/', (req,res) => {
     res.send('Personalities')
 });
 
-
+// nvm scratch that IT'S WORKING commented below out no need it:)
 // tried to load an image to test if json data is the problem but it's not working oh no
 // router.get('/image', async (req, res) => {
 //     try {

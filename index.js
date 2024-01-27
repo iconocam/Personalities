@@ -23,7 +23,7 @@ const logger = (req, res, next) => {
     console.log(1);
     next();
 };
-
+// this CSP is commented out as it wouldn't let me load any source from anything but now it works as i set it. security needs to be UPDATED desperately though now 
 // Couldn't load JSON data without this before I think
 // Content Security Policy
 // app.use((req, res, next) => {
