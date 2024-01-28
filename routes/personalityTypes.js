@@ -188,7 +188,7 @@ async function deleteUser(userId) {
     }
 }
 // Update a user by its ID
-// http://localhost:8000/personalities/users/65b4cb9ca80f1266256f3964  Can use this in postman to test patch , Modifies user 'Ornn' :)
+// http://localhost:8000/personalities/users/65b68bd04baec9a6d2b4a1a5 Can use this in postman to test patch , Modifies user 'Ornn' :)
 router.patch('/users/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
